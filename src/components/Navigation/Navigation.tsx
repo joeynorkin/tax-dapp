@@ -4,7 +4,13 @@ import styles from './Navigation.module.css'
 
 export const Navigation = () => {
 
-  const { wallet, hasProvider, isConnecting, connectMetaMask, isConnected } = useMetaMask()
+  const {
+    wallet,
+    hasProvider,
+    isConnecting,
+    connectMetaMask,
+    isConnected
+  } = useMetaMask()
 
   return (
     <div className={styles.navigation}>

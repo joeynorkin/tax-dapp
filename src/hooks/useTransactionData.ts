@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
-export const useBlockChainData = (address: string) => {
+export const useTransactionData = (address: string, chainId: string) => {
 
   const [ transactionDate, setTransactionDate ] = useState('')
   const [ transactionDateExists, setTransactionDateExists ] = useState(false)
@@ -8,18 +8,28 @@ export const useBlockChainData = (address: string) => {
   const [ error, setError ] = useState(true)
 
   const apiKey = 'RJR6YXMH8V8VJ7IINUMNPP45HIEWY8UP5K'
-  // const url = 'https://api.etherscan.io';
-  const url = 'https://api-sepolia.etherscan.io'
+
+  const mainnetUrl = 'https://api.etherscan.io'
+  const testnetSepoliaUrl = 'https://api-sepolia.etherscan.io'
+  const testnetGoerliUrl = 'https://api-sepolia.etherscan.io'
+
+  const chainIdToUrl: Readonly<Record<string, string>> = {
+    '0x1': mainnetUrl,
+    '0x5': testnetGoerliUrl,
+    '0xaa36a7': testnetSepoliaUrl,
+  }
 
   const fetchTransaction = useCallback(async () => {
     setLoading(true)
     setError(false)
 
-    if (address === '') {
+    if (address === '' || !chainIdToUrl[chainId]) {
       return;
     }
 
-    const response = await fetch(`${url}/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=${apiKey}`)
+    const response = await fetch(
+      `${chainIdToUrl[chainId]}/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=${apiKey}`
+    )
 
     const jsonResponse = await response.json()
 
@@ -40,7 +50,7 @@ export const useBlockChainData = (address: string) => {
     setTransactionDate(formatTimeStamp(jsonResponse.result[0].timeStamp))
     setLoading(false)
 
-  }, [address])
+  }, [address, chainId])
 
   useEffect(() => {
     fetchTransaction()
@@ -51,6 +61,7 @@ export const useBlockChainData = (address: string) => {
     transactionDateExists,
     loading,
     error,
+    chainIdNotSupported: !chainIdToUrl[chainId]
   }
 }
 

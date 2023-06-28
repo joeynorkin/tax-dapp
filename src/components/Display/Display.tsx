@@ -1,5 +1,5 @@
 import { useMetaMask } from '~/hooks/useMetaMask'
-import { useBlockChainData } from '~/hooks/useBlockChainData'
+import { useTransactionData } from '~/hooks/useTransactionData'
 import { formatChainAsNum } from '~/utils'
 import styles from './Display.module.css'
 
@@ -7,8 +7,13 @@ export const Display = () => {
 
   const { wallet, isConnected } = useMetaMask()
   const address = isConnected ? wallet.accounts[0] : ''
-  // const address = '0x78095ebf565beb53ac31f0594287c032539e4cd5'
-  const { transactionDate, transactionDateExists, loading, error } = useBlockChainData(address)
+  const { 
+    transactionDate,
+    transactionDateExists,
+    loading,
+    error,
+    chainIdNotSupported
+  } = useTransactionData(address, wallet.chainId)
 
   return (
     <div className={styles.display}>
@@ -24,7 +29,12 @@ export const Display = () => {
           {!error && !loading && !transactionDateExists &&
             <div>There are no associated transactions with this address.</div>
           }
-          {error &&
+
+          {chainIdNotSupported &&
+            <div>ChainId not supported for retrieving transaction data.</div>
+          }
+
+          {!chainIdNotSupported && error &&
             <div>Error loading transaction data. Please refresh the page.</div>
           }
         </>
