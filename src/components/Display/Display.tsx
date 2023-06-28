@@ -1,11 +1,10 @@
-import { useMetaMask } from "~/hooks/useMetaMask"
-import { formatChainAsNum } from "~/utils"
+import { useMetaMask } from '~/hooks/useMetaMask'
+import { formatChainAsNum } from '~/utils'
+import styles from './Display.module.css'
 
 export const Display = () => {
 
   const { wallet } = useMetaMask()
-
-  const styles = { display: '' }
 
   return (
     <div className={styles.display}>

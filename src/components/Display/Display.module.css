@@ -1,0 +1,5 @@
+.display {
+  /* calculated height: view height minus 128 (68*2) px */
+  height: calc(100% - 136px);
+  padding: 16px;
+}
