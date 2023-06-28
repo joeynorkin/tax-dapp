@@ -24,6 +24,7 @@ interface MetaMaskContextData {
   isConnecting: boolean
   connectMetaMask: () => void
   clearError: () => void
+  isConnected: boolean
 }
 
 const disconnectedState: WalletState = { accounts: [], balance: '', chainId: '' }
@@ -113,6 +114,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
         isConnecting,
         connectMetaMask,
         clearError,
+        isConnected: wallet.accounts.length > 0,
       }}
     >
       { children }

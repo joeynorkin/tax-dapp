@@ -4,7 +4,7 @@ import styles from './Navigation.module.css'
 
 export const Navigation = () => {
 
-  const { wallet, hasProvider, isConnecting, connectMetaMask } = useMetaMask()
+  const { wallet, hasProvider, isConnecting, connectMetaMask, isConnected } = useMetaMask()
 
   return (
     <div className={styles.navigation}>
@@ -17,13 +17,13 @@ export const Navigation = () => {
             </a>
           }
 
-          {window.ethereum?.isMetaMask && wallet.accounts.length < 1 &&
+          {window.ethereum?.isMetaMask && !isConnected &&
             <button disabled={isConnecting} onClick={connectMetaMask}>
               Connect MetaMask
             </button>
           }
 
-          {hasProvider && wallet.accounts.length > 0 &&
+          {hasProvider && isConnected &&
             <a
               className="text_link tooltip-bottom"
               href={`https://etherscan.io/address/${wallet.accounts[0]}`}
