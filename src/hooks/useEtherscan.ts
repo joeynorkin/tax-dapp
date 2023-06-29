@@ -12,13 +12,21 @@ const chainIdToUrl: Readonly<Record<string, string>> = {
   '0xaa36a7': testnetSepoliaUrl,
 }
 
+type EtherscanResponse<T> = {
+  status: string
+  message: string
+  result: T | string
+}
+
 export const useEtherscan = (chainId: string) => {
   const fetchData = useCallback(
-    async (params: string[][]) => {
+    async <T>(params: string[][]) => {
       const response = await fetch(
         `${chainIdToUrl[chainId]}/api?${formatParams(params)}&apikey=${apiKey}`
       )
-      return await response.json()
+
+      const json: EtherscanResponse<T> = await response.json()
+      return json
     },
     [chainId]
   )
