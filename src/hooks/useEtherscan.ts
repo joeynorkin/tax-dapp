@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback } from 'react'
 
 const apiKey = 'RJR6YXMH8V8VJ7IINUMNPP45HIEWY8UP5K'
 
@@ -13,16 +13,21 @@ const chainIdToUrl: Readonly<Record<string, string>> = {
 }
 
 export const useEtherscan = (chainId: string) => {
-
-  const fetchData = useCallback(async (params: string[][]) => {
-    const response = await fetch(`${chainIdToUrl[chainId]}/api?${formatParams(params)}&apikey=${apiKey}`)
-    return await response.json()
-  }, [chainId])
+  const fetchData = useCallback(
+    async (params: string[][]) => {
+      const response = await fetch(
+        `${chainIdToUrl[chainId]}/api?${formatParams(params)}&apikey=${apiKey}`
+      )
+      return await response.json()
+    },
+    [chainId]
+  )
 
   return {
     fetchData,
-    chainIdNotSupported: !chainIdToUrl[chainId]
+    chainIdNotSupported: !chainIdToUrl[chainId],
   }
 }
 
-const formatParams = (params: string[][]) => params.map(([ key, value ]) => `${key}=${value}`).join('&')
+const formatParams = (params: string[][]) =>
+  params.map(([key, value]) => `${key}=${value}`).join('&')

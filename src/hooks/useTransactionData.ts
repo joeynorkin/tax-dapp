@@ -1,38 +1,33 @@
-import {
-  useCallback,
-  useEffect,
-  useState
-} from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { formatTimeStamp } from '~/utils'
 import { useEtherscan } from './useEtherscan'
 
 export const useTransactionData = (address: string, chainId: string) => {
-  const [ transactionDate, setTransactionDate ] = useState('')
-  const [ transactionDateExists, setTransactionDateExists ] = useState(false)
-  const [ loading, setLoading ] = useState(false)
-  const [ error, setError ] = useState(false)
+  const [transactionDate, setTransactionDate] = useState('')
+  const [transactionDateExists, setTransactionDateExists] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
   const { fetchData, chainIdNotSupported } = useEtherscan(chainId)
 
   const params = [
-    [ 'module', 'account' ],
-    [ 'action', 'txlist' ],
-    [ 'address', address ],
-    [ 'startblock', '0' ],
-    [ 'endblock', '99999999' ],
-    [ 'page', '1' ],
-    [ 'offset', '10' ],
-    [ 'sort', 'asc' ],
+    ['module', 'account'],
+    ['action', 'txlist'],
+    ['address', address],
+    ['startblock', '0'],
+    ['endblock', '99999999'],
+    ['page', '1'],
+    ['offset', '10'],
+    ['sort', 'asc'],
   ]
 
   const fetchLatestTransactionDate = useCallback(async () => {
-
     if (address === '' || chainIdNotSupported) {
       setError(true)
       return
     }
 
-    const jsonResponse = await fetchData(params);
+    const jsonResponse = await fetchData(params)
 
     if (jsonResponse.message === 'NOTOK') {
       setError(true)
@@ -60,6 +55,6 @@ export const useTransactionData = (address: string, chainId: string) => {
     transactionDateExists,
     loading,
     error,
-    chainIdNotSupported
+    chainIdNotSupported,
   }
 }
