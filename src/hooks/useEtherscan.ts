@@ -15,7 +15,7 @@ const chainIdToUrl: Readonly<Record<string, string>> = {
 export const useEtherscan = (chainId: string) => {
 
   const fetchData = useCallback(async (params: string[][]) => {
-    const response = await fetch(`${chainIdToUrl[chainId]}/api?${toParamsString(params)}&apikey=${apiKey}`)
+    const response = await fetch(`${chainIdToUrl[chainId]}/api?${formatParams(params)}&apikey=${apiKey}`)
     return await response.json()
   }, [chainId])
 
@@ -25,4 +25,4 @@ export const useEtherscan = (chainId: string) => {
   }
 }
 
-const toParamsString = (params: string[][]) => params.map(([ key, value ]) => `${key}=${value}`).join('&')
+const formatParams = (params: string[][]) => params.map(([ key, value ]) => `${key}=${value}`).join('&')
