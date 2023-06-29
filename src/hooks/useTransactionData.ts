@@ -25,7 +25,7 @@ export const useTransactionData = (address: string, chainId: string) => {
     [ 'sort', 'asc' ],
   ]
 
-  const fetchTransaction = useCallback(async () => {
+  const fetchLatestTransactionDate = useCallback(async () => {
 
     if (address === '' || chainIdNotSupported) {
       setError(true)
@@ -51,9 +51,9 @@ export const useTransactionData = (address: string, chainId: string) => {
     setError(false)
     setLoading(true)
     setTransactionDateExists(false)
-    fetchTransaction()
+    fetchLatestTransactionDate()
     setLoading(false)
-  }, [fetchTransaction])
+  }, [fetchLatestTransactionDate])
 
   return {
     transactionDate,
