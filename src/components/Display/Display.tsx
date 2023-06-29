@@ -15,6 +15,10 @@ export const Display = () => {
     chainIdNotSupported
   } = useTransactionData(address, wallet.chainId)
 
+  console.log(`error: ${error}`)
+  console.log(`loading: ${loading}`)
+  console.log(`transactionDateExists: ${transactionDateExists}`)
+
   return (
     <div className={styles.display}>
       {isConnected &&
@@ -30,11 +34,11 @@ export const Display = () => {
             <div>There are no associated transactions with this address.</div>
           }
 
-          {chainIdNotSupported &&
+          {error && chainIdNotSupported &&
             <div>ChainId not supported for retrieving transaction data.</div>
           }
 
-          {!chainIdNotSupported && error &&
+          {error && !chainIdNotSupported &&
             <div>Error loading transaction data. Please refresh the page.</div>
           }
         </>
