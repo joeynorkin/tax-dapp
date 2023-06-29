@@ -3,8 +3,8 @@ import { useCallback } from 'react'
 const apiKey = 'RJR6YXMH8V8VJ7IINUMNPP45HIEWY8UP5K'
 
 const mainnetUrl = 'https://api.etherscan.io'
+const testnetGoerliUrl = 'https://api-goerli.etherscan.io'
 const testnetSepoliaUrl = 'https://api-sepolia.etherscan.io'
-const testnetGoerliUrl = 'https://api-sepolia.etherscan.io'
 
 const chainIdToUrl: Readonly<Record<string, string>> = {
   '0x1': mainnetUrl,
