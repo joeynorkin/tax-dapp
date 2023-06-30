@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { formatTimeStamp } from '~/utils'
 import { useEtherscan } from './useEtherscan'
 
 type Transaction = {
@@ -27,7 +26,8 @@ type Transaction = {
 }
 
 export const useTransactionData = (address: string, chainId: string) => {
-  const [transactionDate, setTransactionDate] = useState('')
+  const [transaction, setTransaction] = useState<Transaction>({} as Transaction)
+  const [transactionRetrieved, setTransactionRetrieved] = useState(false)
   const { fetchData, chainIdNotSupported } = useEtherscan(chainId)
 
   const params = [
@@ -41,7 +41,7 @@ export const useTransactionData = (address: string, chainId: string) => {
     ['sort', 'asc'],
   ]
 
-  const fetchLatestTransactionDate = useCallback(async () => {
+  const fetchLatestTransaction = useCallback(async () => {
     if (chainIdNotSupported) {
       return
     }
@@ -49,31 +49,25 @@ export const useTransactionData = (address: string, chainId: string) => {
     const response = await fetchData<Transaction[]>(params)
 
     if (typeof response.result === 'string') {
-      if (response.result === 'Max rate limit reached') {
-        // setMaxLimitReached(true)
-      } else {
-        // setError(true)
-      }
       return
     }
 
     if (response.message !== 'OK') {
-      // setError(true)
       return
     }
 
     const tx = response.result[0]
-
-    setTransactionDate(formatTimeStamp(tx.timeStamp))
+    setTransaction(tx)
+    setTransactionRetrieved(true)
   }, [address, chainId])
 
   useEffect(() => {
-    fetchLatestTransactionDate()
-  }, [fetchLatestTransactionDate])
+    fetchLatestTransaction()
+  }, [fetchLatestTransaction])
 
   return {
-    transactionDate,
-    transactionDateExists: !!transactionDate,
     chainIdNotSupported,
+    transaction,
+    transactionRetrieved,
   }
 }
