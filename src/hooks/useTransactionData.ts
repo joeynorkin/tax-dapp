@@ -25,9 +25,12 @@ type Transaction = {
   value: string
 }
 
+// TODO: expose functions to update transaction: most recent recieved?
+// should we cache transaction data?
 export const useTransactionData = (address: string, chainId: string) => {
   const [transaction, setTransaction] = useState<Transaction>({} as Transaction)
   const [transactionRetrieved, setTransactionRetrieved] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const { fetchData, chainIdNotSupported } = useEtherscan(chainId)
 
   const params = [
@@ -49,10 +52,12 @@ export const useTransactionData = (address: string, chainId: string) => {
     const response = await fetchData<Transaction[]>(params)
 
     if (typeof response.result === 'string') {
+      setErrorMessage(response.result)
       return
     }
 
     if (response.message !== 'OK') {
+      setErrorMessage(response.message)
       return
     }
 
@@ -69,5 +74,8 @@ export const useTransactionData = (address: string, chainId: string) => {
     chainIdNotSupported,
     transaction,
     transactionRetrieved,
+    errorMessage,
+    error: !!errorMessage,
+    received: transaction.to === address,
   }
 }
