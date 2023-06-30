@@ -28,8 +28,6 @@ type Transaction = {
 
 export const useTransactionData = (address: string, chainId: string) => {
   const [transactionDate, setTransactionDate] = useState('')
-  const [error, setError] = useState(false)
-  const [maxLimitReached, setMaxLimitReached] = useState(false)
   const { fetchData, chainIdNotSupported } = useEtherscan(chainId)
 
   const params = [
@@ -50,13 +48,17 @@ export const useTransactionData = (address: string, chainId: string) => {
 
     const response = await fetchData<Transaction[]>(params)
 
-    if (response.result === 'Max rate limit reached') {
-      setMaxLimitReached(true)
+    if (typeof response.result === 'string') {
+      if (response.result === 'Max rate limit reached') {
+        // setMaxLimitReached(true)
+      } else {
+        // setError(true)
+      }
       return
     }
 
     if (response.message !== 'OK') {
-      setError(true)
+      // setError(true)
       return
     }
 
@@ -73,7 +75,5 @@ export const useTransactionData = (address: string, chainId: string) => {
     transactionDate,
     transactionDateExists: !!transactionDate,
     chainIdNotSupported,
-    error,
-    maxLimitReached,
   }
 }
