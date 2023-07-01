@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useCoinGecko } from '~/hooks/useCoinGecko'
 import { useTransactionData } from '~/hooks/useTransactionData'
 import { formatTimeStamp, toEth } from '~/utils'
 
@@ -14,6 +15,12 @@ export const TransactionData: React.FC<TransactionDataProps> = ({
   const { transaction, transactionRetrieved, error, errorMessage, received } =
     useTransactionData(address, chainId)
 
+  const { fetchCurrentPrice, currentPrice, initializing } = useCoinGecko()
+
+  useEffect(() => {
+    fetchCurrentPrice('ethereum', 'usd')
+  }, [initializing])
+
   return (
     <>
       {transactionRetrieved && (
@@ -24,8 +31,8 @@ export const TransactionData: React.FC<TransactionDataProps> = ({
             {formatTimeStamp(transaction.timeStamp)}, which is the most recent
             transaction.
           </div>
-          <div>The price of ETH was {'${PRICE}'}.</div>
-          <div>The price of ETH today is {'${PRICE}'}.</div>
+          {/* <div>The price of ETH was {'${PRICE}'}.</div> */}
+          {currentPrice && <div>The price of ETH today is {currentPrice}.</div>}
         </>
       )}
       {error && <div>{errorMessage}</div>}
