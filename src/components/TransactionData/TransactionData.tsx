@@ -15,11 +15,11 @@ export const TransactionData: React.FC<TransactionDataProps> = ({
   const { transaction, transactionRetrieved, error, errorMessage, received } =
     useTransactionData(address, chainId)
 
-  const { fetchCurrentPrice, currentPrice, initializing } = useCoinGecko()
+  const { fetchCurrentPrice, currentPrice, initialized } = useCoinGecko()
 
   useEffect(() => {
     fetchCurrentPrice('ethereum', 'usd')
-  }, [initializing])
+  }, [initialized])
 
   return (
     <>

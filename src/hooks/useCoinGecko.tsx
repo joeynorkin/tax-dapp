@@ -14,7 +14,7 @@ type CoinsListItem = {
 }
 
 interface CoinGeckoContextData {
-  initializing: boolean
+  initialized: boolean
   fetchCurrentPrice: (tokenId: string, currency: string) => void
   currentPrice: string
 }
@@ -30,19 +30,18 @@ export const CoinGeckoContextProvider = ({ children }: PropsWithChildren) => {
 
   const apiUrl = 'https://api.coingecko.com/api/v3'
 
-  // combine both fetch callbacks into one?
-  const fetchSupportedTokenIds = useCallback(async () => {
+  const fetchSupportedTokenIds = async () => {
     const res = await fetch(`${apiUrl}/coins/list`)
     const coinsList: CoinsListItem[] = await res.json()
     const tokenIds: string[] = coinsList.map(item => item.id)
     setSupportedTokenIds(tokenIds)
-  }, [])
+  }
 
-  const fetchSupportedCurrencies = useCallback(async () => {
+  const fetchSupportedCurrencies = async () => {
     const res = await fetch(`${apiUrl}/simple/supported_vs_currencies`)
     const currencies: string[] = await res.json()
     setSupportedCurrencies(currencies)
-  }, [])
+  }
 
   useEffect(() => {
     fetchSupportedTokenIds()
@@ -51,6 +50,7 @@ export const CoinGeckoContextProvider = ({ children }: PropsWithChildren) => {
 
   const isTokenIdSupported = (tokenId: string) =>
     supportedTokenIds.includes(tokenId)
+
   const isCurrencySupported = (currency: string) =>
     supportedCurrencies.includes(currency)
 
@@ -97,7 +97,7 @@ export const CoinGeckoContextProvider = ({ children }: PropsWithChildren) => {
       value={{
         fetchCurrentPrice,
         currentPrice,
-        initializing: isInitializing(),
+        initialized: !isInitializing(),
       }}
     >
       {children}
