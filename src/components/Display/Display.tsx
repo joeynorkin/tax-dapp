@@ -1,7 +1,7 @@
-import { TransactionData } from '../TransactionData/TransactionData'
+import { TransactionData } from '../TransactionData'
+import { WalletInfo } from '../WalletInfo'
 import { CoinGeckoContextProvider } from '~/hooks/useCoinGecko'
 import { useMetaMask } from '~/hooks/useMetaMask'
-import { formatChainAsNum } from '~/utils'
 import styles from './Display.module.css'
 
 export const Display = () => {
@@ -11,10 +11,11 @@ export const Display = () => {
     <div className={styles.display}>
       {isConnected && (
         <>
-          <div>Addr: {wallet.accounts[0]}</div>
-          <div>Balance: {wallet.balance}</div>
-          <div>Hex ChainId: {wallet.chainId}</div>
-          <div>Numeric ChainId: {formatChainAsNum(wallet.chainId)}</div>
+          <WalletInfo
+            address={wallet.accounts[0]}
+            chainId={wallet.chainId}
+            balance={wallet.balance}
+          />
           <CoinGeckoContextProvider>
             <TransactionData
               address={wallet.accounts[0]}

@@ -2,6 +2,13 @@ import { useMetaMask } from '~/hooks/useMetaMask'
 import { formatAddress } from '~/utils'
 import styles from './Navigation.module.css'
 
+const chainIdToUrl: Readonly<Record<string, string>> = {
+  '0x1': 'https://etherscan.io',
+  '0x5': 'https://goerli.etherscan.io',
+  '0xaa36a7': 'https://sepolia.etherscan.io',
+  '0xa4ec': 'https://explorer.celo.org/mainnet',
+}
+
 export const Navigation = () => {
   const { wallet, hasProvider, isConnecting, connectMetaMask, isConnected } =
     useMetaMask()
@@ -26,7 +33,9 @@ export const Navigation = () => {
           {hasProvider && isConnected && (
             <a
               className='text_link tooltip-bottom'
-              href={`https://etherscan.io/address/${wallet.accounts[0]}`}
+              href={`${chainIdToUrl[wallet.chainId]}/address/${
+                wallet.accounts[0]
+              }`}
               target='_blank'
               data-tooltip='Open in Block Explorer'
             >
