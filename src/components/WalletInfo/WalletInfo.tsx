@@ -10,13 +10,10 @@ export const WalletInfo: React.FC<WalletInfoProps> = ({
   address,
   chainId,
   balance,
-}) => {
-  return (
-    <>
-      <div>Address: {address}</div>
-      <div>Hex ChainId: {chainId}</div>
-      <div>Numeric ChainId: {formatChainAsNum(chainId)}</div>
-      <div>Balance: {balance} ETH</div>
-    </>
-  )
-}
+}) => (
+  <>
+    <div>Address: {address}</div>
+    <div>ChainId: {formatChainAsNum(chainId)}</div>
+    <div>Balance: {balance} ETH</div>
+  </>
+)

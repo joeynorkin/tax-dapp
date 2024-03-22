@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
-
-const apiKey = 'RJR6YXMH8V8VJ7IINUMNPP45HIEWY8UP5K'
-
-const mainnetUrl = 'https://api.etherscan.io'
-const testnetGoerliUrl = 'https://api-goerli.etherscan.io'
-const testnetSepoliaUrl = 'https://api-sepolia.etherscan.io'
+import {
+  API_KEY,
+  MAINNET_URL,
+  TESTNET_GOERLI_URL,
+  TESTNET_SEPOLIA_URL,
+} from './etherscanConstants'
 
 const chainIdToUrl: Readonly<Record<string, string>> = {
-  '0x1': mainnetUrl,
-  '0x5': testnetGoerliUrl,
-  '0xaa36a7': testnetSepoliaUrl,
+  '0x1': MAINNET_URL,
+  '0x5': TESTNET_GOERLI_URL,
+  '0xaa36a7': TESTNET_SEPOLIA_URL,
 }
 
 type EtherscanResponse<T> = {
@@ -22,7 +22,7 @@ export const useEtherscan = (chainId: string) => {
   const fetchData = useCallback(
     async <T>(params: string[][]) => {
       const response = await fetch(
-        `${chainIdToUrl[chainId]}/api?${formatParams(params)}&apikey=${apiKey}`
+        `${chainIdToUrl[chainId]}/api?${formatParams(params)}&apikey=${API_KEY}`
       )
 
       const json: EtherscanResponse<T> = await response.json()
